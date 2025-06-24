@@ -1,5 +1,3 @@
-http://www.8n8.com/
-http://8n8.com/
 http://www.8n8.com:80/
 https://www.8n8.com/?intr=8881
 https://www.8n8.com/?intr=8882
