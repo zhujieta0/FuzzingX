@@ -16,9 +16,6 @@ jobs:
           go-version: 1.24.4
           cache: true  # 自动缓存Go模块依赖
           cache-dependency-path: go.sum  # 根据go.sum变化更新缓存
-
-      - name: Debug go.mod
-        run: ls -lah **/go.mod
         
       - name: Cache ProjectDiscovery tools
         uses: actions/cache@v3
