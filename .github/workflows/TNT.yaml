@@ -61,7 +61,7 @@ jobs:
       - name: Running httpx for HTTP webservers probbing
         run: |
 
-           httpx -l active_subdomains.txt -mc 100,101,200,201,204,301,302,304,400,403,404,500,502,503 -p 1-65535 -t 7300 | tee active_urls.txt
+           httpx -l active_subdomains.txt -mc 100,101,200,201,204,301,302,304,400,403,404,500,502,503 -p 1-65535 -t 13000 | tee active_urls.txt
            # httpx -l active_subdomains.txt -mc 100,101,200,201,204,301,302,304,400,403,404,500,502,503 -t 730 -o active_urls.txt
            httpx -l active_subdomains.txt -title -t 230
         shell: bash
