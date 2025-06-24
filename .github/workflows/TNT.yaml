@@ -20,6 +20,14 @@ jobs:
       - name: Setup Dependencies
         run: sudo apt-get install -y libpcap-dev
 
+      - name: Cache ProjectDiscovery tools
+        uses: actions/cache@v3
+        id: tool-cache
+        with:
+          path: /home/runner/go/bin
+          key: ${{ runner.os }}-pd-tools-V1
+          # key: ${{ runner.os }}-pd-tools-${{ hashFiles('/home/runner/go/bin/**') }}
+
       - name: Setting up ProjectDiscovery tools
         if: steps.tool-cache.outputs.cache-hit != 'true'  # 仅在缓存未命中时安装
         env:
@@ -35,14 +43,6 @@ jobs:
           go install -v github.com/projectdiscovery/mapcidr/cmd/mapcidr@latest
         shell: bash
 
-
-      - name: Cache ProjectDiscovery tools
-        uses: actions/cache@v3
-        id: tool-cache
-        with:
-          path: /home/runner/go/bin
-          key: ${{ runner.os }}-pd-tools-V1
-          # key: ${{ runner.os }}-pd-tools-${{ hashFiles('/home/runner/go/bin/**') }}
 
       - name: Add Go bin to PATH  # 确保工具可被后续步骤访问
         run: echo "$GOPATH/bin" >> $GITHUB_PATH
