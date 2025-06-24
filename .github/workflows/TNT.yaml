@@ -21,13 +21,7 @@ jobs:
         uses: actions/cache@v3
         id: tool-cache
         with:
-          path: |
-            /home/runner/go/bin/subfinder
-            /home/runner/go/bin/dnsx
-            /home/runner/go/bin/naabu
-            /home/runner/go/bin/httpx
-            /home/runner/go/bin/gau
-            /home/runner/go/bin/waybackurls
+          path: /home/runner/go/bin/
           key: ${{ runner.os }}-pd-tools-${{ hashFiles('/home/runner/go/bin') }}
           
       - name: Setup Dependencies
@@ -44,6 +38,8 @@ jobs:
           go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
           go install -v github.com/lc/gau/v2/cmd/gau@latest
           go install -v github.com/tomnomnom/waybackurls@latest
+          go install -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest
+          go install -v github.com/projectdiscovery/mapcidr/cmd/mapcidr@latest
         shell: bash
 
       - name: Add Go bin to PATH  # 确保工具可被后续步骤访问
