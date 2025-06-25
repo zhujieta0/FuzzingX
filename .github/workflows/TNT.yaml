@@ -99,26 +99,27 @@ jobs:
       - name: Create local changes
         run: |
           git add *.txt
-      # - name: Commit results to Github
-      #   run: |
-      #     git config --local user.email "admin@fuck.org"
-      #     git config --global user.name "fukin-team"
-      #     git commit -m "fuck Report" -a --allow-empty
-      # - name: Push changes
-      #   uses: ad-m/github-push-action@master
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     branch: ${{ github.ref }}
-
-
-
-      - name: Pull remote changes before push
+      - name: Commit results to Github
+        continue-on-error: true
         run: |
-          git config pull.rebase true  # 启用变基模式避免多余合并提交
-          git pull origin ${{ github.ref_name }}  # 动态获取当前分支名
-      
+          git config --local user.email "admin@inbug.org"
+          git config --global user.name "inbug-team"
+          git commit -m "Fuck Report" -a --allow-empty
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref_name }}
+          branch: ${{ github.ref }}
+
+
+
+      # - name: Pull remote changes before push
+      #   run: |
+      #     git config pull.rebase true  # 启用变基模式避免多余合并提交
+      #     git pull origin ${{ github.ref_name }}  # 动态获取当前分支名
+      
+      # - name: Push changes
+      #   uses: ad-m/github-push-action@master
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     branch: ${{ github.ref_name }}
