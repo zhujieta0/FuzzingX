@@ -41,13 +41,13 @@ jobs:
           go install -v github.com/tomnomnom/waybackurls@latest
           go install -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest
           go install -v github.com/projectdiscovery/mapcidr/cmd/mapcidr@latest
+          go install -v github.com/zan8in/afrog/v3/cmd/afrog@latestges
         shell: bash
 
 
       - name: Add Go bin to PATH  # 确保工具可被后续步骤访问
         run: echo "$GOPATH/bin" >> $GITHUB_PATH
 
-      # ... 其他步骤保持不变 ...
 
       - name: Running DNS enumeration...
         run: |
@@ -58,26 +58,11 @@ jobs:
         shell: bash
 
 
-      # - name: Running httpx for HTTP webservers probbing
-      #   run: |
-      #      # httpx -l active_subdomains.txt -mc 100,101,200,201,204,301,302,304,400,403,404,500,502,503 -p 1-65535 -t 13000 | tee active_urls.txt
-           
-      #      # httpx -l active_subdomains.txt -mc 100,101,200,201,204,301,302,304,400,403,404,500,502,503 -t 730 -o active_urls.txt
-      #      # httpx -l active_subdomains.txt -title -t 230
-      #   shell: bash
-
       - name: Running way/gau for getting all urls...
         continue-on-error: true
         timeout-minutes: 340
         run: |
-          #nuclei -ut | nuclei -up
-          #nuclei -tags log4j -l active_urls.txt -bs 100 -c 50 -rl 300 -nc | tee nuclei_output.txt
-          #naabu -l passive_subdomains.txt -p 1-65535 -c 2000 | httpx -title -t 230 | tee naabu.txt
-          #naabu -l passive_subdomains.txt -p 1-65535 -c 2000 | tee naabu.txt
-          #naabu -l passive_subdomains.txt -tp 1000 -c 3000 | tee naabu.txt
-          ##cat naabu.txt | waybackurls | tee way_urls.txt
 
-          # naabu -l active_subdomains.txt -tp 1-65535 -c 2000 -rate 30000  | tee active_urls.txt
           naabu -l active_subdomains.txt -tp 1000 -c 2000 -rate 30000  | tee active_urls.txt
           
           cat active_urls.txt | gau --subs --blacklist png,jpg,gif,css --o ga_urls.txt
@@ -92,20 +77,25 @@ jobs:
         continue-on-error: true
         timeout-minutes: 340
         run: |
+        
           nuclei -up && nuclei -ut
           git clone https://github.com/projectdiscovery/fuzzing-templates.git
+          
           nuclei -l all_urls.txt -it fuzzing-templates/ -rl 500 -o fuzz_out.txt
           nuclei -l all_urls.txt -s medium, high, critical -rl 500 -o hig_out.txt
+
+          afrog -T all_urls.txt -S medium, high, critical -rl 500 -o afg.html
           
         shell: bash
 
       - name: Create local changes
         run: |
           git add *.txt
+          git add *.html
       - name: Commit results to Github
         continue-on-error: true
         run: |
-          git config --local user.email "admin@inbug.org"
+          git config --local user.email "admin@baby.org"
           git config --global user.name "fuck-team"
           git commit -m "Fuck Report" -a --allow-empty
       - name: Push changes
